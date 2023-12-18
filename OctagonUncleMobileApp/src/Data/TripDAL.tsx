@@ -55,7 +55,7 @@ export const GetTripFromDatabase = async (tripId: string) => {
   return res;
 };
 
-export const GetAllTripsForClientFromDatabase = async (
+export const GetUpcomingTripsFromDatabase = async (
   payerId: string,
   businessId: string,
 ) => {
@@ -64,7 +64,48 @@ export const GetAllTripsForClientFromDatabase = async (
   let trip = {};
 
   await axios
-    .post(`${SERVER_HOST}:${SERVER_PORT}/user-profile/get-user-details`, {
+    .post('http://192.168.3.57:9999/trip/get-upcoming-trips-for-parent', {
+      trip: {
+        BusinessId: businessId,
+        PayerId: payerId,
+      },
+    })
+    .then((response: any) => {
+      let res = [...response.data.result];
+
+      res.forEach(data => {
+        trip = {
+          tripId: data.TripId,
+          driverName: data.FirstName + ' ' + data.LastName,
+          pickUpTime: data.Time,
+          pickUpDate: ConvertDate(data.Date),
+          passengerName: data.Passenger.FirstName,
+          pickUpLocation: data.Passenger.HomeAddress,
+        };
+
+        tripData.push(trip);
+      });
+
+      result = tripData;
+    })
+    .catch((error: any) => {
+      console.log(error);
+      result = error;
+    });
+
+  return result;
+};
+
+export const GetPastTripsFromDatabase = async (
+  payerId: string,
+  businessId: string,
+) => {
+  let result: any;
+  const tripData: {}[] = [];
+  let trip = {};
+
+  await axios
+    .post(`{SERVER_HOST}:${SERVER_PORT}/trip/get-past-trip-for-parent`, {
       trip: {
         BusinessId: businessId,
         PayerId: payerId,
