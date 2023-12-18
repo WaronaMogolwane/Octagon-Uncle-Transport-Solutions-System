@@ -20,13 +20,16 @@ export const AddUserDetailsToDatabase = async (userDetail: UserDetail) => {
       },
     })
     .then((response: any) => {
-      console.log(response.data, response.status);
+      statusCode = response.status;
+      //data = response.data;
     })
     .catch((error: any) => {
       console.log(error);
     });
 
   [];
+
+  return statusCode;
 };
 
 export const GetUserDetailsFromDatabase = async (userId: string) => {
