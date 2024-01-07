@@ -1,9 +1,10 @@
-import axios from "axios";
-import { Trip } from "../Models/Trip";
+import axios from 'axios';
+import {Trip} from '../Models/Trip';
+import {SERVER_HOST, SERVER_PORT} from '@env';
 
 export const AddTripToDatabase = async (trip: Trip) => {
   await axios
-    .post("http://192.168.3.57:9999/trip/add-trip", {
+    .post(`${SERVER_HOST}:${SERVER_PORT}/trip/add-trip`, {
       trip: {
         RegistrationNumber: trip.registrationNumber,
         Passengers: trip.passenger,
@@ -27,7 +28,7 @@ export const AddTripToDatabase = async (trip: Trip) => {
 export const GetTripFromDatabase = async (tripId: string) => {
   let res: any;
   await axios
-    .post("http://192.168.3.57:9999/trip/get-trip", {
+    .post(`${SERVER_HOST}:${SERVER_PORT}/trip/get-trip`, {
       trip: {
         TripId: tripId,
       },
@@ -43,12 +44,12 @@ export const GetTripFromDatabase = async (tripId: string) => {
         result.addressline2,
         result.suburb,
         result.city,
-        result.province
+        result.province,
       );
 
       res = userDetail;
     })
-    .catch((error) => {
+    .catch(error => {
       console.log(error);
       res = error;
     });
@@ -57,14 +58,17 @@ export const GetTripFromDatabase = async (tripId: string) => {
 
 export const GetAllTripsForClientFromDatabase = async (
   payerId: string,
-  businessId: string
+  businessId: string,
 ) => {
   let res: any;
-  await axios.post("http://192.168.3.57:9999/user-profile/get-user-details", {
-    userDetails: {
-      UserId: payerId,
+  await axios.post(
+    `${SERVER_HOST}:${SERVER_PORT}/user-profile/get-user-details`,
+    {
+      userDetails: {
+        UserId: payerId,
+      },
     },
-  });
+  );
   // .then((response: any) => {
   //   let result = response.data.result;
 
@@ -91,11 +95,11 @@ export const GetAllTripsForClientFromDatabase = async (
 };
 
 export const GetAllTripsForBusinessFromDatabase = async (
-  businessId: string
+  businessId: string,
 ) => {
   let res: any;
   //   await axios
-  //     .post("http://192.168.3.57:9999/user-profile/get-user-details", {
+  //     .post(`${SERVER_HOST}:${SERVER_PORT}/user-profile/get-user-details`, {
   //       userDetails: {
   //         UserId: userId,
   //       },
@@ -130,7 +134,7 @@ export const UpdateTripInDatabase = async (trip: Trip) => {
   let data: any;
 
   await axios
-    .patch("http://192.168.3.57:9999/passenger/update-passenger-details", {
+    .patch(`${SERVER_HOST}:${SERVER_PORT}/passenger/update-passenger-details`, {
       userDetail: {
         // UserDetailId: trip.userDetailId,
         // FirstName: trip.firstName,
