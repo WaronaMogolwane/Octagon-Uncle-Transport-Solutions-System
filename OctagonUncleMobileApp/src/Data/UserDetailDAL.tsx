@@ -1,11 +1,12 @@
-import { UserDetail } from "../Models/UserDetail";
-import axios from "axios";
+import {UserDetail} from '../Models/UserDetail';
+import axios from 'axios';
+import {SERVER_HOST, SERVER_PORT} from '@env';
 
 export const AddUserDetailsToDatabase = async (userDetail: UserDetail) => {
   let statusCode: any;
   let data: any;
   await axios
-    .post("http://192.168.3.57:9999/user-profile/add-user-details", {
+    .post(`${SERVER_HOST}:${SERVER_PORT}/user-profile/add-user-details`, {
       userDetail: {
         FirstName: userDetail.firstName,
         LastName: userDetail.lastName,
@@ -31,7 +32,7 @@ export const AddUserDetailsToDatabase = async (userDetail: UserDetail) => {
 export const GetUserDetailsFromDatabase = async (userId: string) => {
   let res: any;
   await axios
-    .post("http://192.168.3.57:9999/user-profile/get-user-details", {
+    .post(`${SERVER_HOST}:${SERVER_PORT}/user-profile/get-user-details`, {
       userDetails: {
         UserId: userId,
       },
@@ -49,12 +50,12 @@ export const GetUserDetailsFromDatabase = async (userId: string) => {
         result.city,
         result.province,
         result.postalcode,
-        result.user_id
+        result.user_id,
       );
 
       res = userDetail;
     })
-    .catch((error) => {
+    .catch(error => {
       console.log(error);
       res = error;
     });
@@ -66,7 +67,7 @@ export const UpdateUserDetailsInDatabase = async (userDetails: UserDetail) => {
   let data: any;
 
   await axios
-    .patch("http://192.168.3.57:9999/passenger/update-passenger-details", {
+    .patch(`${SERVER_HOST}:${SERVER_PORT}/passenger/update-passenger-details`, {
       userDetail: {
         UserDetailId: userDetails.userDetailId,
         FirstName: userDetails.firstName,
